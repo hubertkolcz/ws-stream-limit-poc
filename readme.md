@@ -41,7 +41,9 @@ Each of endpoitns simulates separate streams. The service has a limit of 3 concu
 
 - For load balancing, there could be used ELB Approach, such as described here: https://dzone.com/articles/load-balancing-of-websocket-connections#:~:text=The%20server%20can%20handle%2065%2C536,network%20interfaces%20to%20a%20server.
 
-- API Rate Limiting should also be implemented, such as in examples with the use of Bottleneck library: https://nordicapis.com/everything-you-need-to-know-about-api-rate-limiting/
+- API Rate Limiting should also be implemented, such as in examples with the use of Bottleneck library: 
+https://nordicapis.com/everything-you-need-to-know-about-api-rate-limiting/
+
 Another approach includes using Tyk library.
 
 - For streaming itself, it could be used xdStreaming approach.
