@@ -4,112 +4,57 @@ const url = require('url');
 
 let map = {};
 
-function noop() {}
-
-function heartbeat() {
-  this.isAlive = true;
-}
-
 const server = http.createServer();
 const wss1 = new WebSocket.Server({ noServer: true });
 const wss2 = new WebSocket.Server({ noServer: true });
 const wss3 = new WebSocket.Server({ noServer: true });
 const wss4 = new WebSocket.Server({ noServer: true });
 
-const interval1 = setInterval(function ping() {
-  wss1.clients.forEach(function each(ws) {
-    if (ws.isAlive === false) {
-      console.log('connection with stream 1 was lost');
-      return ws.terminate();
-    }
-    ws.isAlive = false;
-    ws.ping(noop);
-  });
-}, 3000);
-
-const interval2 = setInterval(function ping() {
-  wss1.clients.forEach(function each(ws) {
-    if (ws.isAlive === false) {
-      console.log('connection with stream 2 was lost');
-      return ws.terminate();
-    }
-    ws.isAlive = false;
-    ws.ping(noop);
-    console.log('111');
-  });
-}, 3000);
-
-const interval3 = setInterval(function ping() {
-  wss1.clients.forEach(function each(ws) {
-    if (ws.isAlive === false) {
-      console.log('connection with stream 3 was lost');
-      return ws.terminate();
-    }
-    ws.isAlive = false;
-    ws.ping(noop);
-  });
-}, 3000);
-
-const interval4 = setInterval(function ping() {
-  wss1.clients.forEach(function each(ws) {
-    if (ws.isAlive === false) {
-      console.log('connection with stream 4 was lost');
-      return ws.terminate();
-    }
-    ws.isAlive = false;
-    ws.ping(noop);
-  });
-}, 3000);
-
 wss1.on('connection', function connection(ws, request) {
   ws.send('Welcome to stream 1');
-  ws.isAlive = true;
-  ws.on('pong', heartbeat);
-
   let ip = request.socket.remoteAddress;
+  console.log(`User ${ip} started stream1`);
 
   ws.on('close', function close() {
-    console.log('000');
-    console.log(map);
+    console.log(`User ${ip} closed stream1`);
     map[ip] = map[ip].filter((item) => item !== '/stream1');
-    console.log(map);
-    clearInterval(interval1);
+    console.log(`List of actual streams of user ${ip}: ${map[ip]}`);
   });
 });
 
 wss2.on('connection', function connection(ws, request) {
   ws.send('Welcome to stream 2');
   let ip = request.socket.remoteAddress;
+  console.log(`User ${ip} started stream2`);
+
   ws.on('close', function close() {
-    console.log('000');
-    console.log(map);
+    console.log(`User ${ip} closed stream2`);
     map[ip] = map[ip].filter((item) => item !== '/stream2');
-    console.log(map);
-    clearInterval(interval2);
+    console.log(`List of actual streams of user ${ip}: ${map[ip]}`);
   });
 });
 
 wss3.on('connection', function connection(ws, request) {
   ws.send(`Welcome to stream 3`);
   let ip = request.socket.remoteAddress;
+  console.log(`User ${ip} started stream3`);
+
   ws.on('close', function close() {
-    console.log('000');
-    console.log(map);
+    console.log(`User ${ip} closed stream3`);
     map[ip] = map[ip].filter((item) => item !== '/stream3');
-    console.log(map);
-    clearInterval(interval3);
+    console.log(`List of actual streams of user ${ip}: ${map[ip]}`);
   });
 });
 
 wss4.on('connection', function connection(ws, request) {
-  ws.send('Welcome to stream 4');
+  ws.send(`Welcome to stream 4`);
   let ip = request.socket.remoteAddress;
+  console.log(`User ${ip} started stream4`);
+
   ws.on('close', function close() {
-    console.log('000');
-    console.log(map);
+    console.log(`User ${ip} closed stream4`);
     map[ip] = map[ip].filter((item) => item !== '/stream4');
-    console.log(map);
-    clearInterval(interval4);
+    console.log(`List of actual streams of user ${ip}: ${map[ip]}`);
   });
 });
 
@@ -138,10 +83,8 @@ server.on('upgrade', function upgrade(request, socket, head) {
   if (pathname === '/stream1') {
     wss1.handleUpgrade(request, socket, head, function done(ws) {
       if (map[ip].length < 3) {
-        console.log(map[ip].length);
         wss1.emit('connection', ws, request);
-        ws.send(`user: ${ip}`);
-        map[ip].push('/stream1') || ['/stream1'];
+        map[ip].push('/stream1');
         ws.send(`user is connected to: ${map[ip]}`);
       } else {
         wss1.emit('message', ws, request);
@@ -153,7 +96,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
       if (map[ip].length < 3) {
         wss2.emit('connection', ws, request);
         map[ip].push('/stream2');
-        ws.send(`user is connected to: ${map[ip]}`);
+        ws.send(`you are connected to: ${map[ip]}`);
       } else {
         wss2.emit('message', ws, request);
         wss2.close();
@@ -164,7 +107,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
       if (map[ip].length < 3) {
         wss3.emit('connection', ws, request);
         map[ip].push('/stream3');
-        ws.send(`user is connected to: ${map[ip]}`);
+        ws.send(`you are connected to: ${map[ip]}`);
       } else {
         wss3.emit('message', ws, request);
         wss3.close();
@@ -175,7 +118,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
       if (map[ip].length < 3) {
         wss4.emit('connection', ws, request);
         map[ip].push('/stream4');
-        ws.send(`user is connected to: ${map[ip]}`);
+        ws.send(`you are connected to: ${map[ip]}`);
       } else {
         wss4.emit('message', ws, request);
         wss4.close();
