@@ -23,6 +23,10 @@ Each of endpoitns simulates separate streams. The service has a limit of 3 concu
 ##### Next steps:
 
 - Make the code more generic
+- dynamic endpoints
+- handling edge cases, i.e. with ping/pong implementation
+- additional user authentication, based on device name/tokens
+- in-store Redis/Memchaned database
 - Refactor into TypeScript format
 - Attaching loggers (Winston)
 - Adding automated tests (Jest)
@@ -31,3 +35,13 @@ Each of endpoitns simulates separate streams. The service has a limit of 3 concu
 - Scale-out on AWS Cloud
 - Monitoring API with API Gateway and CloudWatch metrics
 - Load tests with Apache jMeter
+
+##### Scaling Strategy:
+- To make the API more usable, it should be stand together with client which will handle HTTP/s requests. Therefore, it could be easily deployed to an online service, such as Heroku. Alternatively, it could be directly developed with the use of AWS API Gataway's like service. Moreover, it would allow to use 'socket.io' library and its Namespaces, so making easier to generate dynamic API endpoints.
+
+- For load balancing, there could be used ELB Approach, such as described here: https://dzone.com/articles/load-balancing-of-websocket-connections#:~:text=The%20server%20can%20handle%2065%2C536,network%20interfaces%20to%20a%20server.
+
+- API Rate Limiting should also be implemented, such as in examples with the use of Bottleneck library: https://nordicapis.com/everything-you-need-to-know-about-api-rate-limiting/
+Another approach includes using Tyk library.
+
+- For streaming itself, it could be used xdStreaming approach.
