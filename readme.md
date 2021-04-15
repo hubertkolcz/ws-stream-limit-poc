@@ -43,7 +43,6 @@ Each of endpoitns simulates separate streams. The service has a limit of 3 concu
 
 - API Rate Limiting should also be implemented, such as in examples with the use of Bottleneck library: 
 https://nordicapis.com/everything-you-need-to-know-about-api-rate-limiting/
+another approach includes using Tyk library.
 
-Another approach includes using Tyk library.
-
-- For streaming itself, it could be used xdStreaming approach.
+- For streaming itself, it could be used xdStreaming.
